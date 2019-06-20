@@ -1,58 +1,58 @@
-$collArray = Array.new
+$seqLengthArray = Array.new
+$seqArray = Array.new
+
+
+def findLongestSeq(num)
+    i = 1
+    maxLength = 0
+    seqArray = Array.new
+    
+
+    while ( i <= num)
+
+        array = getCollatzSequence(i)
+
+        if (array.length > maxLength)
+            maxLength = array.length
+            seqArray = array
+        end
+
+        # $seqArray[i] = array
+        i += 1
+    end
+    return seqArray
+end
+
 
 def getCollatzSequence(num)
     array = Array.new
     array << num
-
-    while num > 1
-        if num.even?
-            num = num/2
-        else
-            num = 3 * num +1
-        end
-        array << num
-    end
-    return array
-end
-
-def getCollatzSequenceLength(num)
-    seqLength = 0
     startNum = num
 
     while num > 1
-        if startNum > num
-            return seqLength + $collArray[num]
-        end
+
+        # if startNum > num
+        #    return array | $seqArray[num]  
+        # end
 
         if num.even?
             num = num/2
         else
             num = 3 * num +1
         end
-        seqLength = seqLength + 1
+
+        array << num
     end
-    return seqLength
+
+    return array
 end
 
-def findLongestSeq(num)
-    i = 1
-    startSeq = 0
-    maxLength = 0
-    
 
-    while ( i <= num)
-        array = getCollatzSequence(i)
-        cLength = array.length
-        if (cLength > maxLength)
-            maxLength = cLength
-            startSeq = i
-        end
-        $collArray[i] = cLength
-        i = i + 1
-    end
-   
-    return startSeq, maxLength
-end
+
+
+
+
+
 
 
 def findLongestSeqLength(num)
@@ -67,19 +67,46 @@ def findLongestSeqLength(num)
             maxLength = cLength
             startSeq = i
         end
-        $collArray[i] = cLength
+        $seqLengthArray[i] = cLength
         i = i + 1
     end
    
+    # return getCollatzSequence(startSeq)
     return startSeq, maxLength
 end
 
-puts findLongestSeq(1000000)
-puts findLongestSeqLength(1000000)
+
+def getCollatzSequenceLength(num)
+    seqLength = 0
+    startNum = num
+
+    while num > 1
+        if startNum > num
+            return seqLength + $seqLengthArray[num] 
+        end
+
+        if num.even?
+            num = num/2
+        else
+            num = 3 * num +1
+        end
+
+        seqLength = seqLength + 1
+
+    end
+
+    return seqLength + 1
+end
+
+# puts findLongestSeqLength(1000000)
+# answerArray = findLongestSeq(1000000)
+# puts answerArray.length
+# puts answerArray[0]
+
 
  require 'benchmark'
- num = 10000
+ num = 1000000
  Benchmark.bm do |x|
-   x.report("findLongestSeq") { findLongestSeq(num) }
    x.report("findLongestSeqLength")  { findLongestSeqLength(num)  }
+   x.report("findLongestSeq") { findLongestSeq(num) }
  end
