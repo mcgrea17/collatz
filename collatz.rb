@@ -1,39 +1,12 @@
 $seqLengthArray = Array.new
-$seqArray = Array.new
 
 
-def findLongestSeq(num)
-    i = 1
-    maxLength = 0
-    seqArray = Array.new
-    
-
-    while ( i <= num)
-
-        array = getCollatzSequence(i)
-
-        if (array.length > maxLength)
-            maxLength = array.length
-            seqArray = array
-        end
-
-        # $seqArray[i] = array
-        i += 1
-    end
-    return seqArray
-end
-
-
+# Find the Callotaz sequence for the given start point
 def getCollatzSequence(num)
     array = Array.new
     array << num
-    startNum = num
 
     while num > 1
-
-        # if startNum > num
-        #    return array | $seqArray[num]  
-        # end
 
         if num.even?
             num = num/2
@@ -48,40 +21,16 @@ def getCollatzSequence(num)
 end
 
 
-
-
-
-
-
-
-
-def findLongestSeqLength(num)
-    i = 1
-    startSeq = 0
-    maxLength = 0
-    
-    while ( i <= num)
-        cLength = getCollatzSequenceLength(i)
-        
-        if (cLength > maxLength)
-            maxLength = cLength
-            startSeq = i
-        end
-        $seqLengthArray[i] = cLength
-        i = i + 1
-    end
-   
-    # return getCollatzSequence(startSeq)
-    return startSeq, maxLength
-end
-
-
-def getCollatzSequenceLength(num)
+# Find the sequence length for the given num
+#
+# While creating the sequence if a number in the sequence has already had the 
+# length calculated and saved in $seqLengthArray, just add the length and return the value
+# otherwise create the sequence and keep the count (length)
+def getSequenceLength(num)
     seqLength = 0
-    startNum = num
 
     while num > 1
-        if startNum > num
+        if $seqLengthArray[num]
             return seqLength + $seqLengthArray[num] 
         end
 
@@ -98,15 +47,38 @@ def getCollatzSequenceLength(num)
     return seqLength + 1
 end
 
-# puts findLongestSeqLength(1000000)
-# answerArray = findLongestSeq(1000000)
-# puts answerArray.length
-# puts answerArray[0]
+
+# Find the longest Collatz Sequence starting from 1 to the given maxNum
+# Find the longest length and starting point and then get the sequence from
+# the starting point startSeq
+def findLongestSeq(maxNum)
+    i = 1
+    startSeq = 0
+    maxLength = 0
+    
+    while ( i <= maxNum)
+        cLength = getSequenceLength(i)
+        
+        if (cLength > maxLength)
+            maxLength = cLength
+            startSeq = i
+        end
+        $seqLengthArray[i] = cLength
+        i = i + 1
+    end
+   
+    return getCollatzSequence(startSeq)
+    
+end
+
+answerArray = findLongestSeq(1000000)
+puts answerArray.inspect
+puts answerArray.length
+puts answerArray[0]
 
 
  require 'benchmark'
  num = 1000000
  Benchmark.bm do |x|
-   x.report("findLongestSeqLength")  { findLongestSeqLength(num)  }
    x.report("findLongestSeq") { findLongestSeq(num) }
  end
