@@ -3,17 +3,10 @@ $seqLengthArray = Array.new
 
 # Find the Callotaz sequence for the given start point
 def getCollatzSequence(num)
-    array = Array.new
-    array << num
+    array = [num]
 
     while num > 1
-
-        if num.even?
-            num = num/2
-        else
-            num = 3 * num +1
-        end
-
+        num.even? ? num = num/2 : num = 3 * num + 1
         array << num
     end
 
@@ -33,15 +26,8 @@ def getSequenceLength(num)
         if $seqLengthArray[num]
             return seqLength + $seqLengthArray[num] 
         end
-
-        if num.even?
-            num = num/2
-        else
-            num = 3 * num +1
-        end
-
-        seqLength = seqLength + 1
-
+        num.even? ? num = num/2  : num = 3 * num +1
+        seqLength +=  1
     end
 
     return seqLength + 1
@@ -64,11 +50,10 @@ def findLongestSeq(maxNum)
             startSeq = i
         end
         $seqLengthArray[i] = cLength
-        i = i + 1
+        i += 1
     end
    
     return getCollatzSequence(startSeq)
-    
 end
 
 answerArray = findLongestSeq(1000000)
